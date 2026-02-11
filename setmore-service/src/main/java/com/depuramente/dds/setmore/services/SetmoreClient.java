@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriBuilder;
 import reactor.core.publisher.Mono;
 
-import java.util.function.Consumer;
+import java.util.Map;
 
 import static com.depuramente.dds.common.constants.setmore.SetmoreConstants.BEARER;
 
@@ -23,12 +22,16 @@ public class SetmoreClient {
         this.authService = authService;
     }
 
-    public <T> Mono<T> get(String path, Class<T> bodyType, Consumer<UriBuilder> uriCustomizer) {
+    public <T> Mono<T> get(String path, Class<T> bodyType, Map<String, ?> pathVariables, Map<String, String> queryParams){
         return authService.getAccessToken()
                 .flatMap(token -> client.get()
                         .uri(uriBuilder -> {
                             uriBuilder.path(path);
-                            if (uriCustomizer != null) uriCustomizer.accept(uriBuilder);
+                            if (queryParams != null) {
+                                queryParams.forEach(uriBuilder::queryParam);
+                            } if (pathVariables != null) {
+                                return uriBuilder.build(pathVariables);
+                            }
                             return uriBuilder.build();
                         })
                         .header(HttpHeaders.AUTHORIZATION, BEARER + token)
