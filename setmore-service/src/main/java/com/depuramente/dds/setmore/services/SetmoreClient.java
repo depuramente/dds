@@ -22,14 +22,33 @@ public class SetmoreClient {
         this.authService = authService;
     }
 
-    public <T> Mono<T> get(String path, Class<T> bodyType, Map<String, ?> pathVariables, Map<String, String> queryParams){
+    public <T> Mono<T> get(String path, Class<T> bodyType, Map<String, ?> pathVariables, Map<String, String> queryParams) {
         return authService.getAccessToken()
                 .flatMap(token -> client.get()
                         .uri(uriBuilder -> {
                             uriBuilder.path(path);
                             if (queryParams != null) {
                                 queryParams.forEach(uriBuilder::queryParam);
-                            } if (pathVariables != null) {
+                            }
+                            if (pathVariables != null) {
+                                return uriBuilder.build(pathVariables);
+                            }
+                            return uriBuilder.build();
+                        })
+                        .header(HttpHeaders.AUTHORIZATION, BEARER + token)
+                        .retrieve()
+                        .bodyToMono(bodyType));
+    }
+
+    public <T> Mono<T> put(String path, Class<T> bodyType, Map<String, ?> pathVariables, Map<String, String> queryParams) {
+        return authService.getAccessToken()
+                .flatMap(token -> client.put()
+                        .uri(uriBuilder -> {
+                            uriBuilder.path(path);
+                            if (queryParams != null) {
+                                queryParams.forEach(uriBuilder::queryParam);
+                            }
+                            if (pathVariables != null) {
                                 return uriBuilder.build(pathVariables);
                             }
                             return uriBuilder.build();
@@ -45,15 +64,6 @@ public class SetmoreClient {
                         .uri(path)
                         .header(HttpHeaders.AUTHORIZATION, BEARER + token)
                         .bodyValue(body)
-                        .retrieve()
-                        .bodyToMono(bodyType));
-    }
-
-    public <T> Mono<T> put(String path, Class<T> bodyType) {
-        return authService.getAccessToken()
-                .flatMap(token -> client.put()
-                        .uri(path)
-                        .header(HttpHeaders.AUTHORIZATION, BEARER + token)
                         .retrieve()
                         .bodyToMono(bodyType));
     }
