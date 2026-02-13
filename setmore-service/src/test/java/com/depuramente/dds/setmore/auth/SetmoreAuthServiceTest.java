@@ -12,7 +12,7 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Tag("Integration")
+@Tag("E2E")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SetmoreAuthServiceTest {
     @Autowired

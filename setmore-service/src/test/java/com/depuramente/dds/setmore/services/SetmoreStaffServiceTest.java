@@ -3,20 +3,19 @@ package com.depuramente.dds.setmore.services;
 import com.depuramente.dds.common.dto.setmore.staff.StaffDto;
 import com.depuramente.dds.common.dto.setmore.staff.StaffResponse;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Tag("E2E")
 class SetmoreStaffServiceTest {
 
     @Autowired

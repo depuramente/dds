@@ -1,18 +1,15 @@
 package com.depuramente.dds.setmore.services;
 
-import com.depuramente.dds.common.dto.setmore.customer.*;
-import com.depuramente.dds.setmore.auth.SetmoreAuthService;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.depuramente.dds.common.dto.setmore.customer.CreateCustomerRequest;
+import com.depuramente.dds.common.dto.setmore.customer.CustomerDto;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.node.ObjectNode;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +18,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Tag("E2E")
 class SetmoreCustomerServiceTest {
 
     private static String firstname;
@@ -37,19 +35,9 @@ class SetmoreCustomerServiceTest {
     private static String imageUrl;
     private static String comment;
     private static Map<String, Object> additionalFields;
-    private static boolean response;
-    private static String msg;
-    private static String key;
-
 
     @Autowired
     SetmoreCustomerService service;
-
-    @Autowired
-    WebClient client;
-
-    @Autowired
-    SetmoreAuthService authService;
 
     @BeforeAll
     static void setup() {
@@ -68,9 +56,6 @@ class SetmoreCustomerServiceTest {
         comment = "no comment";
         additionalFields = new HashMap<>();
         additionalFields.put("Instagram", "@janedoe");
-        response = true;
-        msg = "Success";
-        key = "6402c97e-c7ad-48ec-b3b3-92ac56bc8a7e";
     }
 
     @Test

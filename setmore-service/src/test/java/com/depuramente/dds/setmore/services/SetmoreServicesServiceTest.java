@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-@Tag("EndToEnd")
+@Tag("E2E")
 class SetmoreServicesServiceTest {
     @Autowired
     SetmoreServicesService service;
