@@ -6,7 +6,9 @@ import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.depuramente.dds.common.constants.setmore.SetmoreConstants.CURSOR;
 import static com.depuramente.dds.common.constants.setmore.SetmoreConstants.SETMORE_STAFF_PATH;
@@ -20,13 +22,13 @@ public class SetmoreStaffService {
     }
 
     public Mono<StaffResponse> fetchStaffPage(@Nullable String cursor) {
+        Map<String, String> queryParams = new HashMap<>();
+        if (cursor != null) {
+            queryParams.put(CURSOR, cursor);
+        }
         return client.get(SETMORE_STAFF_PATH,
                 StaffResponse.class,
-                uri -> {
-                    if (cursor != null) {
-                        uri.queryParam(CURSOR, cursor);
-                    }
-                });
+                null, queryParams);
     }
 
     public Mono<List<StaffDto>> fetchAllStaff() {

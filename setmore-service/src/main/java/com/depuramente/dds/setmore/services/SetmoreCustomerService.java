@@ -8,7 +8,9 @@ import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.depuramente.dds.common.constants.setmore.SetmoreConstants.*;
 
@@ -30,14 +32,17 @@ public class SetmoreCustomerService {
     public Mono<List<CustomerDto>> getCustomers(String firstName,
                                                 @Nullable String email,
                                                 @Nullable String phone) {
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put(FIRSTNAME, firstName);
+        if (email != null) {
+            queryParams.put(EMAIL, email);
+        }
+        if (phone != null) {
+            queryParams.put(PHONE, phone);
+        }
         return client.get(SETMORE_CUSTOMER,
                         GetCustomerResponse.class,
-                        uri -> {
-
-                            uri.queryParam(FIRSTNAME, firstName);
-                            if (email != null) uri.queryParam(EMAIL, email);
-                            if (phone != null) uri.queryParam(PHONE, phone);
-                        })
+                        null, queryParams)
                 .map(r -> r.data().customer());
     }
 }
